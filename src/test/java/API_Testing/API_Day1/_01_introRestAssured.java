@@ -1,11 +1,12 @@
 package API_Testing.API_Day1;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.testng.annotations.Test;
 
 public class _01_introRestAssured {
 
-    // Rest Assured is a java library that is used to perform API tests
+// Rest Assured is a java library that is used to perform API tests
 // It uses BDD Style such as given, when, then, and, etc.
 // Rest Assured has methods to fetch data from the response body. When making a request.
 // Rest Assured works with HTTP requests: CRUD (Create, Read, Update, Delete) (POST, GET, PUT, DELETE)
@@ -43,7 +44,7 @@ public class _01_introRestAssured {
 // Base url = https://api.octoperf.com
 // Full url = https://api.octoperf.com/public/users/login
 // Full url with Query params =
-//          "https://api.octoperf.com/public/users/login?password=ethan1409&username=ricardoarnez@hotmail.com"
+//          https://api.octoperf.com/public/users/login?password=ethan1409&username=ricardoarnez@hotmail.com
 
 
 // Task: Make a HTTP: POST request with given
@@ -57,4 +58,48 @@ public class _01_introRestAssured {
                 .prettyPeek(); // Prints the whole response body and headers
     }
 
+    @Test
+    public void printResponsePrettyPrint(){
+        RestAssured.given()
+                .when()
+                .post("https://api.octoperf.com/public/users/login?password=ethan1409&username=ricardoarnez@hotmail.com")
+                .prettyPrint(); // Prints the whole response body and headers
+    }
+
+/*
+When we verify the status codes we must pay attention to the following errors from the response body
+
+1xx --> Information
+2xx --> success ( 200 -> OK, 201 -> Created, 202 -> Accepted, 204 -> No content)
+3xx --> Redirection
+4xx --> Client error (400 -> Bad Request, 401 -> Unauthorized, 403 -> Forbidden, 404 -> Not Found)
+5xx --> Server error (500 -> Internal Server Error)
+ */
+
+// Perform a Post request to log in API endpoint
+// Verify Status code is 200 OK
+
+    @Test
+    public void verifyStatusCode(){
+        RestAssured.given()
+                .when()
+                .post("https://api.octoperf.com/public/users/login?password=ethan1409&username=ricardoarnez@hotmail.com")
+                .then()
+                .assertThat()
+                .statusCode(200);
+        System.out.println("Test verified, status code is 200 ok"); // Optional
+    }
+
+    // Perform a Post request to log in API endpoint
+    // Verify Content Type = JSON
+    @Test
+    public void verifyContentType(){
+        RestAssured.given()
+                .when()
+                .post("https://api.octoperf.com/public/users/login?password=ethan1409&username=ricardoarnez@hotmail.com")
+                .then()
+                .assertThat()
+                .contentType(ContentType.JSON);
+        System.out.println("Test verified that content type = JSON");
+    }
 }
